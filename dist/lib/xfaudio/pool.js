@@ -7,6 +7,7 @@ exports.AudioTask = void 0;
 const node_worker_threads_pool_1 = require("node-worker-threads-pool");
 const path_1 = __importDefault(require("path"));
 const os_1 = __importDefault(require("os"));
+const tools_1 = require("../../utils/tools");
 class AudioTask {
     audioPool;
     audios;
@@ -22,6 +23,18 @@ class AudioTask {
             task: path_1.default.resolve(__dirname, './worker'),
         });
     }
+    async textClassification(text) {
+        const res = await (0, tools_1.retryAxiosRequest)({
+            url: 'http://127.0.0.1:5000/text-classification',
+            method: 'POST',
+            data: {
+                text: text
+            }
+        });
+        if (res.data.errno === 0) {
+            return res.data.data;
+        }
+    }
     async startAudioTask() {
         const audio = this.audios.shift();
         if (!audio) {
@@ -29,6 +42,9 @@ class AudioTask {
         }
         const result = await this.audioPool.exec(audio);
         this.done++;
+        if (result.status === 'success' && result.result) {
+            result.tag = await this.textClassification(result.result);
+        }
         const isDone = this.done === this.taskNum;
         this.callback(result, isDone);
         if (!isDone) {

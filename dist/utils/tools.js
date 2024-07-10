@@ -3,7 +3,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.calculateFileHash = exports.sleep = exports.parseJSONWithCatch = void 0;
+exports.retryAxiosRequest = exports.calculateFileHash = exports.sleep = exports.parseJSONWithCatch = void 0;
+const axios_1 = __importDefault(require("axios"));
 const crypto_1 = __importDefault(require("crypto"));
 const fs_1 = __importDefault(require("fs"));
 function parseJSONWithCatch(str, defaultValue = {}) {
@@ -37,4 +38,24 @@ function calculateFileHash(filePath, algorithm = 'sha256') {
     });
 }
 exports.calculateFileHash = calculateFileHash;
+function retryAxiosRequest(config, maxRetries = 3) {
+    return new Promise((resolve, reject) => {
+        (0, axios_1.default)(config)
+            .then(response => {
+            if (response.status === 200 && response.data.errno === 0) {
+                resolve(response);
+            }
+            throw new Error(response.data.errno);
+        })
+            .catch(error => {
+            if (config.__retryCount < maxRetries) {
+                config.__retryCount += 1;
+                console.log(`重试次数：${config.__retryCount}`);
+                return retryAxiosRequest(config, maxRetries);
+            }
+            reject(error);
+        });
+    });
+}
+exports.retryAxiosRequest = retryAxiosRequest;
 //# sourceMappingURL=tools.js.map

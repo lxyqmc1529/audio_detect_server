@@ -23,4 +23,7 @@ export class Audio extends BaseModel {
 
   @Column({ unique: true })
   hash: string;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  tag: string;
 }

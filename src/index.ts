@@ -11,6 +11,7 @@ import createRouter from './routes';
 import { bootstrap } from './lib/bootstrap';
 import { sessionConfig, APP, UnlessLogin } from './config';
 import 'reflect-metadata';
+import axios from 'axios';
 
 bootstrap().then(() => {
   const app = new Koa();

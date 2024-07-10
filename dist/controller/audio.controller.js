@@ -35,12 +35,13 @@ class AudioController {
         const { ids } = ctx.request.body;
         const audios = await audio_service_1.default.findByIds(ids);
         const audioTask = new pool_1.AudioTask(audios, async (data, done) => {
-            const { id, status, result } = data;
+            const { id, status, result, tag } = data;
             const audioInfo = await audio_service_1.default.findById(id);
             if (audioInfo) {
                 Object.assign(audioInfo, {
                     status,
-                    result
+                    result,
+                    tag,
                 });
                 await audio_service_1.default.save(audioInfo);
             }

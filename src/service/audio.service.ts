@@ -16,7 +16,7 @@ class AudioService {
   async getAll(page: number, limit: number) {
     const [data, total] = await this.audioRepo.findAndCount({
       order: {
-        createdAt: 'DESC'
+        updatedAt: 'DESC'
       },
       skip: (page - 1) * limit,
       take: limit

@@ -89,7 +89,7 @@ class AudioSDK {
                 };
             }
         }
-        content.push(lastPrompt);
+        lastPrompt && content.push(lastPrompt);
         return content;
     }
     async getSingleAudioResult(orderId) {
@@ -126,8 +126,8 @@ class AudioSDK {
             }
             const orderResult = (0, tools_1.parseJSONWithCatch)(result.content?.orderResult);
             const detectResult = this.convertAudioResultData(orderResult.lattice2 || []);
-            const detectText = detectResult.reduce((str, item) => {
-                return str + `${item.prompt}: ${item.text}\n`;
+            const detectText = detectResult.filter(Boolean).reduce((str, item) => {
+                return str + `${item?.prompt}: ${item?.text}\n`;
             }, '');
             resolve(detectText);
         });
