@@ -35,10 +35,11 @@ export class AudioTask {
           text: text
         }
       });
-      if (res.data.errno === 0) {
-        return res.data.data;
+      if (res.data.errno !== 0) {
+        throw Error('分类失败');
       }
-    } finally {
+      return res.data.data;
+    } catch(err) {
       return '';
     }
   }
@@ -51,7 +52,10 @@ export class AudioTask {
     const result = await this.audioPool.exec(audio);
     this.done++;
     if (result.status === 'success' && result.result) {
+      // result.tag = await this.textClassification(result.result);
+      // console.log('等待分类结果',await this.textClassification(result.result))
       result.tag = await this.textClassification(result.result);
+      console.log('分类结果', result.tag)
     }
     const isDone = this.done === this.taskNum;
     this.callback(result, isDone);

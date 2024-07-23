@@ -24,15 +24,21 @@ class AudioTask {
         });
     }
     async textClassification(text) {
-        const res = await (0, tools_1.retryAxiosRequest)({
-            url: 'http://127.0.0.1:5000/text-classification',
-            method: 'POST',
-            data: {
-                text: text
+        try {
+            const res = await (0, tools_1.retryAxiosRequest)({
+                url: 'http://127.0.0.1:5000/text-classification',
+                method: 'POST',
+                data: {
+                    text: text
+                }
+            });
+            if (res.data.errno !== 0) {
+                throw Error('分类失败');
             }
-        });
-        if (res.data.errno === 0) {
             return res.data.data;
+        }
+        catch (err) {
+            return '';
         }
     }
     async startAudioTask() {
@@ -43,7 +49,10 @@ class AudioTask {
         const result = await this.audioPool.exec(audio);
         this.done++;
         if (result.status === 'success' && result.result) {
+            // result.tag = await this.textClassification(result.result);
+            // console.log('等待分类结果',await this.textClassification(result.result))
             result.tag = await this.textClassification(result.result);
+            console.log('分类结果', result.tag);
         }
         const isDone = this.done === this.taskNum;
         this.callback(result, isDone);
