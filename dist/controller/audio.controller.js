@@ -55,12 +55,16 @@ class AudioController {
         audioTask.runTask();
         ctx.success(undefined);
     }
-    async getAllAudios(ctx) {
+    async listAudios(ctx) {
         const query = ctx.request.query;
         const page = Number(query.page) || 1;
         const limit = Number(query.limit) || 10;
-        const audios = await audio_service_1.default.getAll(page, limit);
+        const audios = await audio_service_1.default.listAudio(page, limit);
         ctx.success(audios);
+    }
+    async getAll(ctx) {
+        const result = await audio_service_1.default.getAllAudio();
+        ctx.success(result);
     }
     async updateAudioInfo(ctx) {
         const id = ctx.params.id;

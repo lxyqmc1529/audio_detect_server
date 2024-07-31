@@ -10,7 +10,7 @@ class AudioService {
     inserts(audios) {
         return this.audioRepo.save(audios);
     }
-    async getAll(page, limit) {
+    async listAudio(page, limit) {
         const [data, total] = await this.audioRepo.findAndCount({
             order: {
                 updatedAt: 'DESC'
@@ -23,6 +23,14 @@ class AudioService {
             total,
             page
         };
+    }
+    async getAllAudio() {
+        const data = await this.audioRepo.find({
+            order: {
+                updatedAt: 'DESC'
+            }
+        });
+        return data;
     }
     findById(id) {
         return this.audioRepo.findOne({

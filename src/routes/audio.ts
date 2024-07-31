@@ -21,8 +21,8 @@ const upload = multer({ storage });
 router.get('/sse', sse);
 router.post('/upload', upload.array('audio'), audioController.uploadAudio);
 router.post('/detect', audioController.detectAudio);
-router.get('/getAll', audioController.getAllAudios);
+router.get('/list', audioController.listAudios);
 router.post('/:id', audioController.updateAudioInfo);
-
+router.get('/getAll', audioController.getAll);
 
 export default router;

@@ -56,12 +56,17 @@ class AudioController {
     ctx.success(undefined);
   }
 
-  async getAllAudios(ctx: Context) {
+  async listAudios(ctx: Context) {
     const query = ctx.request.query;
     const page = Number(query.page) || 1;
     const limit = Number(query.limit) || 10;
-    const audios = await audioService.getAll(page, limit);
+    const audios = await audioService.listAudio(page, limit);
     ctx.success(audios);
+  }
+
+  async getAll(ctx: Context) {
+    const result = await audioService.getAllAudio();
+    ctx.success(result);
   }
 
   async updateAudioInfo(ctx: Context) {

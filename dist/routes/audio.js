@@ -23,7 +23,8 @@ const upload = (0, koa_multer_1.default)({ storage });
 router.get('/sse', sse_middleware_1.sse);
 router.post('/upload', upload.array('audio'), audio_controller_1.default.uploadAudio);
 router.post('/detect', audio_controller_1.default.detectAudio);
-router.get('/getAll', audio_controller_1.default.getAllAudios);
+router.get('/list', audio_controller_1.default.listAudios);
 router.post('/:id', audio_controller_1.default.updateAudioInfo);
+router.get('/getAll', audio_controller_1.default.getAll);
 exports.default = router;
 //# sourceMappingURL=audio.js.map
