@@ -26,4 +26,10 @@ export class Audio extends BaseModel {
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   tag: string;
+
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  line: string;
+  
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  address: string;
 }

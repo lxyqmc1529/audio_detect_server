@@ -26,6 +26,8 @@ let Audio = class Audio extends base_model_1.BaseModel {
     status;
     hash;
     tag;
+    line;
+    address;
 };
 exports.Audio = Audio;
 __decorate([
@@ -52,6 +54,14 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 255, nullable: true }),
     __metadata("design:type", String)
 ], Audio.prototype, "tag", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'varchar', length: 500, nullable: true }),
+    __metadata("design:type", String)
+], Audio.prototype, "line", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'varchar', length: 500, nullable: true }),
+    __metadata("design:type", String)
+], Audio.prototype, "address", void 0);
 exports.Audio = Audio = __decorate([
     (0, typeorm_1.Entity)()
 ], Audio);

@@ -9,6 +9,8 @@ interface AudioDetectResult {
   status: 'success' | 'fail',
   result?: string;
   tag?: string;
+  line?: string[];
+  address?: string[];
 }
 export class AudioTask {
   audioPool: StaticPool<any>;
@@ -40,7 +42,7 @@ export class AudioTask {
       }
       return res.data.data;
     } catch(err) {
-      return '';
+      return null;
     }
   }
 
@@ -54,8 +56,13 @@ export class AudioTask {
     if (result.status === 'success' && result.result) {
       // result.tag = await this.textClassification(result.result);
       // console.log('等待分类结果',await this.textClassification(result.result))
-      result.tag = await this.textClassification(result.result);
-      console.log('分类结果', result.tag)
+      const processData = await this.textClassification(result.result);
+      if (processData) {
+        const { tag, line, address } = processData;
+        result.tag = tag;
+        result.line = Array.from(new Set(line));
+        result.address = Array.from(new Set(address));
+      }
     }
     const isDone = this.done === this.taskNum;
     this.callback(result, isDone);
