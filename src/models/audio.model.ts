@@ -32,4 +32,7 @@ export class Audio extends BaseModel {
   
   @Column({ type: 'varchar', length: 500, nullable: true })
   address: string;
+
+  @Column({ type: 'text', nullable: true })
+  sensitive: string;
 }

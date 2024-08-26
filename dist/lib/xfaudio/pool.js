@@ -53,10 +53,11 @@ class AudioTask {
             // console.log('等待分类结果',await this.textClassification(result.result))
             const processData = await this.textClassification(result.result);
             if (processData) {
-                const { tag, line, address } = processData;
+                const { tag, line, address, sensitive } = processData;
                 result.tag = tag;
-                result.line = line;
-                result.address = address;
+                result.line = Array.from(new Set(line));
+                result.address = Array.from(new Set(address));
+                result.sensitive = Array.from(new Set(sensitive));
             }
         }
         const isDone = this.done === this.taskNum;

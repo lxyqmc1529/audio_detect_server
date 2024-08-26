@@ -57,9 +57,9 @@ class UserController {
       return ctx.fail(error);
     }
     // 验证码校验
-    if (data.captcha.toLowerCase() !== ctx.session.captcha?.toLowerCase()) {
-      return ctx.fail(ServiceError[20003]);
-    }
+    // if (data.captcha.toLowerCase() !== ctx.session.captcha?.toLowerCase()) {
+    //   return ctx.fail(ServiceError[20003]);
+    // }
     const userInfo = await userService.findByName(data.username);
     if (!userInfo) {
       return ctx.fail(ServiceError[20002]);
